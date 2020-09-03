@@ -3,6 +3,7 @@
 Game::Game(): window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pillpopper") {}
 
 void Game::update(sf::Time interpolation, sf::Time t, sf::Time dt) {
+  framerateHud.setText(std::to_string(frameCount));
 }
 
 void Game::processEvents() {
@@ -22,6 +23,7 @@ void Game::processEvents() {
 
 void Game::render(sf::Time interpolation) {
     window.clear();
+    window.draw(framerateHud.getText());
     window.display();
 }
 
@@ -35,14 +37,16 @@ void Game::run() {
 
   while (window.isOpen()) {
     processEvents();
+    frameCount++;
 
     sf::Time currentTime = gameClock.getElapsedTime();
     sf::Time frameTime = currentTime - startTime;
     if (frameTime.asSeconds() > FRAME_TIME) {
+      frameCount = 0;
       frameTime = sf::seconds(FRAME_TIME);
+      startTime = currentTime;
     }
 
-    startTime = currentTime;
     accumulator += frameTime;
 
     while (accumulator >= dt) {

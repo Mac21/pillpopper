@@ -2,6 +2,7 @@
 #define GAME_HPP_
 
 #include "Defs.hpp"
+#include "Framerate.hpp"
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics.hpp>
@@ -16,6 +17,8 @@ private:
   void update(sf::Time interpolation, sf::Time t, sf::Time dt);
   void render(sf::Time interpolation);
 
+  long frameCount = 0;
+  Framerate framerateHud;
   sf::Clock gameClock;
   sf::RenderWindow window;
 };
