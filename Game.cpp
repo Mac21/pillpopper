@@ -2,8 +2,9 @@
 
 Game::Game(): window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pillpopper") {}
 
-void Game::update(sf::Time interpolation, sf::Time t, sf::Time dt) {
+void Game::update(sf::Time t, sf::Time dt) {
   framerateHud.setText(std::to_string(frameCount));
+  pill.update(t, dt);
 }
 
 void Game::processEvents() {
@@ -16,14 +17,31 @@ void Game::processEvents() {
       }
     }
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+      pill.move(-3.5f, 0.f);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+      pill.move(3.5f, 0.f);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+      pill.move(0.f, 3.5f);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+      pill.move(0.f, 3.5f);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+      pill.move(0.f, 3.5f);
+    }
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
       exit(EXIT_SUCCESS);
     }
 }
 
-void Game::render(sf::Time interpolation) {
+void Game::render() {
     window.clear();
     window.draw(framerateHud.getText());
+    window.draw(pill.getSprite());
     window.display();
 }
 
@@ -32,8 +50,6 @@ void Game::run() {
   sf::Time accumulator = sf::Time();
   sf::Time dt = sf::seconds(0.01);
   sf::Time t = sf::seconds(0.0);
-  sf::Time interpolation = sf::seconds(0.0);
-  sf::Time previous_interpolation = interpolation;
 
   while (window.isOpen()) {
     processEvents();
@@ -50,16 +66,11 @@ void Game::run() {
     accumulator += frameTime;
 
     while (accumulator >= dt) {
-      previous_interpolation = interpolation;
-      update(interpolation, t, dt);
+      update(t, dt);
       t += dt;
       accumulator -= dt;
     }
 
-    auto alpha = accumulator / dt;
-
-    interpolation = sf::seconds(interpolation.asSeconds() * alpha + previous_interpolation.asSeconds() *(1.0 - alpha));
-
-    render(interpolation);
+    render();
   }
 }
