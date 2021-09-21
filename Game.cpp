@@ -14,23 +14,25 @@ void Game::processEvents() {
       case sf::Event::Closed:
         window.close();
         return;
+      default:
+        break;
       }
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-      pill.move(-3.5f, 0.f);
+      pill.move(-PILL_MOVEMENT_VELOCITY, 0.F);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-      pill.move(3.5f, 0.f);
+      pill.move(PILL_MOVEMENT_VELOCITY, 0.F);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-      pill.move(0.f, 3.5f);
+      pill.move(0.F, PILL_MOVEMENT_VELOCITY);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-      pill.move(0.f, 3.5f);
+      pill.rotateClockwise();
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-      pill.move(0.f, 3.5f);
+      pill.rotateCounterClockwise();
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
@@ -48,8 +50,8 @@ void Game::render() {
 void Game::run() {
   sf::Time startTime = gameClock.getElapsedTime();
   sf::Time accumulator = sf::Time();
-  sf::Time dt = sf::seconds(0.01);
-  sf::Time t = sf::seconds(0.0);
+  sf::Time dt = sf::seconds(DT);
+  sf::Time t = sf::Time();
 
   while (window.isOpen()) {
     processEvents();
@@ -57,9 +59,9 @@ void Game::run() {
 
     sf::Time currentTime = gameClock.getElapsedTime();
     sf::Time frameTime = currentTime - startTime;
-    if (frameTime.asSeconds() > FRAME_TIME) {
+    if (frameTime.asSeconds() > MAX_FRAME_TIME) {
       frameCount = 0;
-      frameTime = sf::seconds(FRAME_TIME);
+      frameTime = sf::seconds(MAX_FRAME_TIME);
       startTime = currentTime;
     }
 
