@@ -12,12 +12,14 @@ class Pill {
 public:
   Pill();
   void move(float, float);
+  void rotateClockwise();
+  void rotateCounterClockwise();
   void update(sf::Time t, sf::Time dt);
   sf::Sprite getSprite();
 private:
   sf::Sprite sprite;
   sf::Texture texture;
-  float velocity = 0.0001;
+  float velocity = PILL_GRAVITY_VELOCITY;
 };
 
 #endif
